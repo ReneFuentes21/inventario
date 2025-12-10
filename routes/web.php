@@ -1,20 +1,25 @@
 <?php
 
+use App\Models\InventoryMovement;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
+use App\Http\Controllers\InventoryMovementController;
+use App\Livewire\InventoryMovementForm;
 
 Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('home');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+    Route::get('/movements', InventoryMovementForm::class)->name('movements');
+
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
-
+    
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
     Volt::route('settings/password', 'settings.password')->name('user-password.edit');
     Volt::route('settings/appearance', 'settings.appearance')->name('appearance.edit');
